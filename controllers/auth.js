@@ -7,10 +7,10 @@ export const SignUp = async (req, res) => {
   const userdata = req.body;
 
   const { error } = SignUpValidation(userdata);
-  if (error) return res.status(400).json({ data: { status: "ERROR", message: error.details[0].message } });
+  if (error) return res.status(400).json({ status: "ERROR", message: error.details[0].message });
 
   const emailExist = await AuthModel.findOne({ email: userdata.email });
-  if (emailExist) return res.status(401).json({ data: { status: "ERROR", message: "Email already exists" } });
+  if (emailExist) return res.status(401).json({ status: "ERROR", message: "Email already exists" });
 
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(userdata.password, salt);
@@ -22,9 +22,9 @@ export const SignUp = async (req, res) => {
   });
   try {
     const savedUserdata = await create_user.save();
-    res.status(200).json({ data: { status: "SUCCESS", message: "Successfully created account" } });
+    res.status(200).json({ status: "SUCCESS", message: "Successfully created account" });
   } catch (error) {
-    res.status(400).json({ data: { status: "ERROR", message: error.message } });
+    res.status(400).json({ status: "ERROR", message: error.message });
   }
 };
 
@@ -33,17 +33,18 @@ export const SignIn = async (req, res) => {
 
   try {
     const { error } = SignInValidation(userdata);
-    if (error) return res.status(400).json({ data: { status: "ERROR", message: error.details[0].message } });
+    console.log(error);
+    if (error) return res.status(400).json({ status: "ERROR", message: error.details[0].message });
 
     const dbUser = await AuthModel.findOne({ email: userdata.email });
-    if (!dbUser) return res.status(400).json({ data: { status: "ERROR", message: "Invalid Email" } });
+    if (!dbUser) return res.status(400).json({ status: "ERROR", message: "Invalid Email" });
 
     const validPassword = bcrypt.compareSync(userdata.password, dbUser.password);
-    if (!validPassword) return res.status(400).json({ data: { status: "ERROR", message: "Invalid Password" } });
+    if (!validPassword) return res.status(400).json({ status: "ERROR", message: "Invalid Password" });
 
     const token = jwt.sign({ _id: dbUser._id }, process.env.TOKEN_SECRET);
-    res.header("auth-token", token).json({ data: { status: "SUCCESS", message: "Successfully Logged-In" } });
+    res.header("auth-token", token).json({ status: "SUCCESS", message: "Successfully Logged-In" });
   } catch (error) {
-    res.status(404).json({ data: { status: "ERROR", message: error.message } });
+    res.status(404).json({ status: "ERROR", message: error.message });
   }
 };
