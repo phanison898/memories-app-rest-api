@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", Verification, getPosts);
 router.get("/:id", Verification, getPostById);
-router.post("/", createPost);
+router.post("/", Verification, createPost);
 router.patch("/:id", Verification, updatePost);
 router.delete("/:id", Verification, deletePost);
 
