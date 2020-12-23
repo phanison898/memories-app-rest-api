@@ -33,7 +33,7 @@ export const SignUp = async (req, res) => {
   try {
     const savedUserdata = await create_user.save();
     const token = jwt.sign({ _id: savedUserdata._id }, process.env.TOKEN_SECRET);
-    res.status(200).json({ status: true, message: "Successfully created account", token: token, user: savedUserdata._id });
+    res.status(200).json({ status: true, message: "Successfully created account", token: token });
   } catch (error) {
     res.status(400).json({ status: false, message: error.message });
   }
@@ -53,7 +53,7 @@ export const SignIn = async (req, res) => {
     if (!validPassword) return res.status(400).json({ status: false, message: "Invalid Password" });
 
     const token = jwt.sign({ _id: dbUser._id }, process.env.TOKEN_SECRET);
-    res.header("auth-token", token).json({ status: true, message: "Successfully Logged-In", token: token, user: dbUser._id });
+    res.header("auth-token", token).json({ status: true, message: "Successfully Logged-In", token: token });
   } catch (error) {
     res.status(404).json({ status: false, message: error.message });
   }

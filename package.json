@@ -18,6 +18,8 @@
     "joi": "^17.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.6",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "swagger-jsdoc": "^6.0.0-rc.5",
+    "swagger-ui-express": "^4.1.6"
   }
 }
