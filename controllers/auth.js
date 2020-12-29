@@ -9,7 +9,7 @@ export const GetRegisteredUser = async (req, res) => {
     const { name, email } = await AuthModel.findById(id);
     res.status(201).json({ name: name, email: email });
   } catch (error) {
-    res.status(404).json(error);
+    res.status(404).json({ status: false, message: error.message });
   }
 };
 
