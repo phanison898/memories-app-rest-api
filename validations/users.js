@@ -20,7 +20,7 @@ export const SignInValidation = (data) => {
 export const PostValidation = (data) => {
   const schema = Joi.object({
     title: Joi.string().min(1).max(255).required(),
-    description: Joi.string().min(1).max(1024),
+    description: Joi.string().min(1).max(1024).required(),
     tags: Joi.array(),
     selectedFile: Joi.string().required(),
   });
