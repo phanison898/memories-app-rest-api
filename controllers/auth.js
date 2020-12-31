@@ -53,7 +53,7 @@ export const SignIn = async (req, res) => {
     if (!validPassword) return res.status(400).json({ status: false, message: "Invalid Password" });
 
     const token = jwt.sign({ _id: dbUser._id }, process.env.TOKEN_SECRET);
-    res.header("auth-token", token).json({ status: true, message: "Successfully Logged-In", token: token });
+    res.header("auth-token", token).json({ status: true, message: "Successfully Logged-In", token: token, email: dbUser.email, username: dbUser.name });
   } catch (error) {
     res.status(404).json({ status: false, message: error.message });
   }
