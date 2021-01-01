@@ -4,7 +4,8 @@ export const SignUpValidation = (data) => {
   const schema = Joi.object({
     name: Joi.string().min(3).max(255).required(),
     email: Joi.string().min(3).max(255).required().email(),
-    password: Joi.string().min(6).max(1024).required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    password: Joi.string().min(6).max(1024).required(),
+    confirmPassword: Joi.string().required(),
   });
   return schema.validate(data);
 };
@@ -12,7 +13,7 @@ export const SignUpValidation = (data) => {
 export const SignInValidation = (data) => {
   const schema = Joi.object({
     email: Joi.string().min(3).max(255).required().email(),
-    password: Joi.string().min(6).max(1024).required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    password: Joi.string().min(6).max(1024).required(),
   });
   return schema.validate(data);
 };

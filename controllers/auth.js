@@ -19,6 +19,8 @@ export const SignUp = async (req, res) => {
   const { error } = SignUpValidation(userdata);
   if (error) return res.status(400).json({ status: false, message: error.details[0].message });
 
+  if (userdata.password.localeCompare(userdata.confirmPassword) !== 0) return res.status(400).json({ status: false, message: "pasword & confirm password should be same" });
+
   const emailExist = await AuthModel.findOne({ email: userdata.email });
   if (emailExist) return res.status(401).json({ status: false, message: "Email already exists" });
 
@@ -33,7 +35,7 @@ export const SignUp = async (req, res) => {
   try {
     const savedUserdata = await create_user.save();
     const token = jwt.sign({ _id: savedUserdata._id }, process.env.TOKEN_SECRET);
-    res.status(200).json({ status: true, message: "Successfully created account", token: token });
+    res.status(200).json({ status: true, message: "Successfully created account", token: token, email: savedUserdata.email, username: savedUserdata.name });
   } catch (error) {
     res.status(400).json({ status: false, message: error.message });
   }
