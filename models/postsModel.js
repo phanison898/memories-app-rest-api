@@ -4,7 +4,7 @@ const postsSchema = mongoose.Schema({
   userID: String,
   title: String,
   description: String,
-  tags: [String],
+  tags: String,
   selectedFile: String,
   date: {
     type: Date,
