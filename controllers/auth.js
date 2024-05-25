@@ -7,7 +7,7 @@ export const GetRegisteredUser = async (req, res) => {
   const id = req.user;
   try {
     const { name, email } = await AuthModel.findById(id);
-    res.status(201).json({ name: name, email: email });
+    res.status(200).json({ name: name, email: email });
   } catch (error) {
     res.status(404).json({ status: false, message: error.message });
   }
@@ -19,7 +19,10 @@ export const SignUp = async (req, res) => {
   const { error } = SignUpValidation(userdata);
   if (error) return res.status(400).json({ status: false, message: error.details[0].message });
 
-  if (userdata.password.localeCompare(userdata.confirmPassword) !== 0) return res.status(400).json({ status: false, message: "pasword & confirm password should be same" });
+  if (userdata.password.localeCompare(userdata.confirmPassword) !== 0)
+    return res
+      .status(400)
+      .json({ status: false, message: "pasword & confirm password should be same" });
 
   const emailExist = await AuthModel.findOne({ email: userdata.email });
   if (emailExist) return res.status(401).json({ status: false, message: "Email already exists" });
@@ -35,7 +38,13 @@ export const SignUp = async (req, res) => {
   try {
     const savedUserdata = await create_user.save();
     const token = jwt.sign({ _id: savedUserdata._id }, process.env.TOKEN_SECRET);
-    res.status(200).json({ status: true, message: "Successfully created account", token: token, email: savedUserdata.email, username: savedUserdata.name });
+    res.status(201).json({
+      status: true,
+      message: "Successfully created account",
+      token: token,
+      email: savedUserdata.email,
+      username: savedUserdata.name,
+    });
   } catch (error) {
     res.status(400).json({ status: false, message: error.message });
   }
@@ -55,7 +64,13 @@ export const SignIn = async (req, res) => {
     if (!validPassword) return res.status(400).json({ status: false, message: "Invalid Password" });
 
     const token = jwt.sign({ _id: dbUser._id }, process.env.TOKEN_SECRET);
-    res.header("auth-token", token).json({ status: true, message: "Successfully Logged-In", token: token, email: dbUser.email, username: dbUser.name });
+    res.header("auth-token", token).json({
+      status: true,
+      message: "Successfully Logged-In",
+      token: token,
+      email: dbUser.email,
+      username: dbUser.name,
+    });
   } catch (error) {
     res.status(404).json({ status: false, message: error.message });
   }
